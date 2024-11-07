@@ -1,61 +1,107 @@
+"use client";
 import Image from "next/image";
+import React, { useEffect, useRef } from "react";
+import * as echarts from "echarts";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const chartRef = useRef(null);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+  useEffect(() => {
+    const chart = echarts.init(chartRef.current);
+    const option = {
+      series: [
+        {
+          type: "graph",
+          layout: "none",
+          symbolSize: 50,
+          roam: true,
+          label: {
+            show: true,
+          },
+          edgeSymbol: ["circle", "arrow"],
+          edgeSymbolSize: [4, 10],
+          edgeLabel: {
+            fontSize: 20,
+          },
+          data: [
+            {
+              name: "Node 1",
+              x: 300,
+              y: 300,
+            },
+            {
+              name: "Node 2",
+              x: 800,
+              y: 300,
+            },
+            {
+              name: "Node 3",
+              x: 550,
+              y: 100,
+            },
+            {
+              name: "Node 4",
+              x: 550,
+              y: 500,
+            },
+            {
+              x: 550,
+              y: 600,
+            },
+          ],
+          links: [
+            {
+              source: 0,
+              target: 1,
+              symbolSize: [5, 20],
+              lineStyle: {
+                width: 5,
+                curveness: 0.2,
+              },
+            },
+            {
+              source: "Node 2",
+              target: "Node 1",
+              lineStyle: {
+                curveness: 0.2,
+              },
+            },
+            {
+              source: "Node 1",
+              target: "Node 3",
+            },
+            {
+              source: "Node 2",
+              target: "Node 3",
+            },
+            {
+              source: "Node 2",
+              target: "Node 4",
+            },
+            {
+              source: "Node 1",
+              target: "Node 4",
+            },
+          ],
+          lineStyle: {
+            opacity: 0.9,
+            width: 2,
+            curveness: 0,
+          },
+        },
+      ],
+    };
+
+    chart.setOption(option);
+
+    return () => {
+      chart.dispose();
+    };
+  }, []);
+  return (
+    <div className="flex flex-col h-screen gap-4 p-4">
+      <header className="flex gap-4 items-center justify-between p-4 bg-cgray rounded-md text-white shadow-md">
+        <div className="flex items-center gap-2">
           <Image
             aria-hidden
             src="/file.svg"
@@ -63,29 +109,10 @@ export default function Home() {
             width={16}
             height={16}
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+          <span>GHOST</span>
+          <span className="text-sm">(v13.4.12)</span>
+        </div>
+        <div className="flex gap-2">
           <Image
             aria-hidden
             src="/globe.svg"
@@ -93,9 +120,47 @@ export default function Home() {
             width={16}
             height={16}
           />
-          Go to nextjs.org →
+          <span>tail</span>
+        </div>
+      </header>
+      <nav className="flex gap-4">
+        <a className="rounded transition-colors flex items-center justify-center bg-cpurple gap-2 hover:bg-[#AB47BC] dark:hover:bg-[#ccc] h-10 px-8 py-4">
+          <Image
+            aria-hidden
+            src="/file.svg"
+            alt="File icon"
+            width={16}
+            height={16}
+          />
         </a>
-      </footer>
+        <div className="flex gap-1">
+          <a className="rounded transition-colors flex items-center justify-center bg-cblue gap-2 hover:bg-[#42A5F5] dark:hover:bg-[#ccc] h-10 px-8 py-4">
+            <Image
+              aria-hidden
+              src="/file.svg"
+              alt="File icon"
+              width={16}
+              height={16}
+            />
+          </a>
+          <a className="rounded transition-colors flex items-center justify-center bg-cblue gap-2 hover:bg-[#42A5F5] dark:hover:bg-[#ccc] h-10 px-8 py-4">
+            <Image
+              aria-hidden
+              src="/file.svg"
+              alt="File icon"
+              width={16}
+              height={16}
+            />
+          </a>
+        </div>
+      </nav>
+      <main className="flex-1 flex flex-col rounded border-2 border-orange-500">
+        <div className="bg-blue-100 font-600 px-4 py-2 text-lg">Block: 153222</div>
+        <div className="flex-1">
+          <div ref={chartRef} style={{ width: "100%", height: "100%" }}></div>
+        </div>
+      </main>
+      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-between"></footer>
     </div>
   );
 }
